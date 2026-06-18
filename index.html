@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>קניין 2.0 — לימוד דיני קניין</title>
+  <title>קניין מאסטר — לימוד דיני קניין</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700;800&family=Frank+Ruhl+Libre:wght@400;700;900&display=swap" rel="stylesheet" />
   <style>
@@ -16,19 +16,15 @@
     .logo-area{border-bottom:1px solid rgba(184,134,11,0.3);padding:22px 20px 18px;}
     .logo-title{font-family:'Frank Ruhl Libre',serif;font-size:1.4rem;font-weight:900;color:#fde68a;}
     .logo-sub{font-size:0.72rem;color:#9ca3af;margin-top:3px;}
-    .prog-label{font-size:0.67rem;color:#6b7280;margin-bottom:5px;margin-top:13px;}
-    .prog-wrap{background:#374151;border-radius:4px;height:5px;overflow:hidden;}
-    .prog-fill{height:100%;background:var(--gold);border-radius:4px;width:40%;}
-    .prog-info{font-size:0.67rem;color:#9ca3af;margin-top:4px;}
     .nav-sec-lbl{font-size:0.63rem;font-weight:700;color:#4b5563;text-transform:uppercase;letter-spacing:0.1em;padding:10px 20px 3px;}
-    .nav-item{display:flex;align-items:flex-start;gap:11px;padding:13px 20px;cursor:pointer;border-right:3px solid transparent;transition:all .18s;color:#9ca3af;}
-    .nav-item:hover{background:rgba(255,255,255,0.06);color:#e5e7eb;}
-    .nav-item.active{background:rgba(184,134,11,0.15);border-right-color:var(--gold);color:#fde68a;}
-    .nav-icon{font-size:1.15rem;flex-shrink:0;margin-top:1px;}
+    .nav-item{display:flex;align-items:flex-start;gap:11px;padding:13px 18px;margin:2px 10px;border-radius:10px;cursor:pointer;border-right:none;transition:background .15s ease,color .15s ease;color:#9ca3af;}
+    .nav-item:hover{background:rgba(255,255,255,0.05);color:#e5e7eb;}
+    .nav-item.active{background:rgba(184,134,11,0.16);border-right:none;color:#fde68a;}
+    .nav-icon{font-size:1.15rem;flex-shrink:0;margin-top:1px;opacity:.9;}
     .nav-txt{flex:1;}
     .nav-label{font-size:0.82rem;font-weight:600;line-height:1.3;}
     .nav-sub{font-size:0.7rem;color:#6b7280;margin-top:2px;}
-    .nav-item.active .nav-sub{color:#fbbf24;opacity:.7;}
+    .nav-item.active .nav-sub{color:#fbbf24;opacity:.75;}
     .nav-badge{background:rgba(184,134,11,.25);color:#fde68a;font-size:0.63rem;padding:2px 7px;border-radius:20px;font-weight:700;flex-shrink:0;align-self:center;}
     .nav-soon{font-size:0.63rem;color:#4b5563;align-self:center;}
     .sidebar-footer{padding:14px 20px;border-top:1px solid rgba(255,255,255,0.07);margin-top:auto;}
@@ -39,23 +35,26 @@
     .header-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;}
     .header-eyebrow{font-size:0.7rem;color:#9ca3af;font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;}
     .header-title{font-family:'Frank Ruhl Libre',serif;font-size:1.5rem;font-weight:700;color:#1a1a2e;}
-    .sbadge{font-size:0.71rem;font-weight:700;padding:4px 10px;border-radius:20px;flex-shrink:0;margin-top:4px;}
-    .s-active{background:#dcfce7;color:#15803d;}
-    .s-soon{background:#f3f4f6;color:#6b7280;}
     .tab-bar{display:flex;gap:3px;}
     .tab-btn{padding:10px 20px;font-size:0.87rem;font-weight:600;border-radius:8px 8px 0 0;cursor:pointer;border:none;background:transparent;color:#718096;font-family:'Assistant',sans-serif;border-bottom:3px solid transparent;transition:all .15s;}
     .tab-btn:hover{color:var(--ink);background:rgba(0,0,0,0.04);}
     .tab-btn.active{color:var(--gold);border-bottom-color:var(--gold);background:var(--gold-pale);}
-    .content-area{padding:26px 30px;max-width:880px;width:100%;}
+    .content-area{padding:30px 34px;max-width:880px;width:100%;line-height:1.7;}
     /* Cards */
-    .card{background:white;border:1px solid var(--border);border-radius:12px;padding:22px 24px;margin-bottom:18px;}
+    .card{background:white;border:1px solid var(--border);border-radius:14px;padding:22px 24px;margin-bottom:18px;box-shadow:0 1px 3px rgba(26,26,46,0.04),0 8px 24px -8px rgba(26,26,46,0.07);}
+    /* Chapter summary intro */
+    .chap-summary{background:linear-gradient(160deg,var(--gold-pale) 0%,#fffdf8 65%);border:1px solid var(--gold-light);border-radius:16px;padding:24px 28px;margin-bottom:24px;position:relative;overflow:hidden;}
+    .chap-summary::before{content:"";position:absolute;top:0;right:0;width:5px;height:100%;background:linear-gradient(180deg,var(--gold) 0%,var(--gold-light) 100%);}
+    .chap-summary-label{display:flex;align-items:center;gap:7px;font-size:0.68rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;}
+    .chap-summary-label .line{flex:0 0 22px;height:1px;background:var(--gold-light);}
+    .chap-summary p{font-family:'Frank Ruhl Libre',serif;font-size:1.16rem;font-weight:400;line-height:1.85;color:#2d2a3d;letter-spacing:.01em;}
     .card h3{font-family:'Frank Ruhl Libre',serif;font-size:1.1rem;color:var(--ink);margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--gold-light);}
     .brow{display:flex;gap:10px;margin-bottom:10px;align-items:flex-start;}
     .bdot{width:7px;height:7px;background:var(--gold);border-radius:50%;margin-top:7px;flex-shrink:0;}
     .btxt{font-size:0.89rem;line-height:1.72;color:#374151;}
     .tc{display:inline-block;background:#fef3c7;color:#92400e;font-size:0.7rem;padding:2px 7px;border-radius:4px;font-weight:700;margin-right:4px;vertical-align:middle;}
     .tl{display:inline-block;background:#dbeafe;color:#1e40af;font-size:0.7rem;padding:2px 7px;border-radius:4px;font-weight:700;margin-right:4px;vertical-align:middle;}
-    .rbox{background:linear-gradient(135deg,#fdf6e3,#fef9ee);border:1px solid var(--gold-light);border-right:4px solid var(--gold);border-radius:8px;padding:13px 15px;margin-bottom:11px;}
+    .rbox{background:linear-gradient(135deg,#fdf6e3,#fef9ee);border:1px solid var(--gold-light);border-right:4px solid var(--gold);border-radius:10px;padding:13px 15px;margin-bottom:11px;box-shadow:0 2px 8px -2px rgba(184,134,11,0.1);}
     .rname{font-weight:700;font-size:0.84rem;color:var(--gold);margin-bottom:4px;}
     .rtxt{font-size:0.84rem;color:#4b5563;line-height:1.65;}
     /* Flow */
@@ -69,7 +68,7 @@
     .farrow{text-align:center;color:var(--gold);font-size:1.15rem;margin:2px 0;}
     .fbranches{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:5px;}
     /* Practice */
-    .ccard{background:white;border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px;}
+    .ccard{background:white;border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:20px;box-shadow:0 1px 3px rgba(26,26,46,0.04),0 8px 24px -8px rgba(26,26,46,0.07);}
     .chdr{background:var(--sidebar-bg);color:white;padding:16px 22px;display:flex;align-items:center;gap:12px;}
     .cnum{background:var(--gold);color:var(--ink);font-weight:800;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.88rem;flex-shrink:0;}
     .cbody{padding:22px 24px;}
@@ -80,7 +79,7 @@
     .cbtn{background:var(--sidebar-bg);color:white;border:none;padding:11px 26px;border-radius:8px;font-family:'Assistant',sans-serif;font-size:0.88rem;font-weight:700;cursor:pointer;margin-top:12px;transition:background .15s;}
     .cbtn:hover{background:#2d2d4e;}
     .cbtn:disabled{opacity:.45;cursor:not-allowed;}
-    .fbbox{background:var(--gold-pale);border:1.5px solid var(--gold);border-radius:12px;padding:18px 22px;margin-top:18px;}
+    .fbbox{background:var(--gold-pale);border:1px solid var(--gold-light);border-right:3px solid var(--gold);border-radius:14px;padding:18px 22px;margin-top:18px;box-shadow:0 2px 10px -2px rgba(184,134,11,0.12);}
     .fbh{font-family:'Frank Ruhl Libre',serif;font-weight:700;font-size:1rem;margin-bottom:13px;}
     .fbs{margin-bottom:13px;}
     .fbs h4{font-size:0.8rem;font-weight:700;color:var(--gold);margin-bottom:5px;}
@@ -112,7 +111,7 @@
     .kw-found{background:#dcfce7;color:#15803d;font-weight:700;padding:1px 6px;border-radius:4px;}
     .kw-missing{background:#fee2e2;color:#b91c1c;font-weight:700;padding:1px 6px;border-radius:4px;margin:2px 3px 2px 0;display:inline-block;}
     /* Media */
-    .acard{background:white;border:1px solid var(--border);border-radius:12px;padding:20px 22px;margin-bottom:13px;}
+    .acard{background:white;border:1px solid var(--border);border-radius:14px;padding:20px 22px;margin-bottom:13px;box-shadow:0 1px 3px rgba(26,26,46,0.04),0 8px 24px -8px rgba(26,26,46,0.07);}
     .arow{display:flex;gap:13px;align-items:center;margin-bottom:13px;}
     .athumb{width:50px;height:50px;border-radius:9px;background:linear-gradient(135deg,#1a1a2e,#2d2d5e);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;}
     .atitle{font-weight:700;font-size:0.91rem;color:var(--ink);margin-bottom:3px;}
@@ -154,11 +153,8 @@
 <div id="app">
   <aside id="sidebar">
     <div class="logo-area">
-      <div class="logo-title">קניין 2.0</div>
+      <div class="logo-title">קניין מאסטר</div>
       <div class="logo-sub">ד"ר עדי מרקוביץ' גרוס · רייכמן</div>
-      <div class="prog-label">התקדמות כוללת</div>
-      <div class="prog-wrap"><div class="prog-fill"></div></div>
-      <div class="prog-info">2 מתוך 5 נושאים פעילים</div>
     </div>
     <div class="nav-sec-lbl">נושאי הקורס</div>
     <nav id="nav-items"></nav>
@@ -171,7 +167,6 @@
           <div class="header-eyebrow" id="hdr-eyebrow"></div>
           <div class="header-title" id="hdr-title"></div>
         </div>
-        <div class="sbadge" id="hdr-status"></div>
       </div>
       <div class="tab-bar">
         <button class="tab-btn active" data-tab="study" onclick="switchTab('study')">📘 מצב לימוד</button>
@@ -195,6 +190,7 @@ const DB = {
   ],
   content:{
     foundations:{
+      summary:"פרק זה עוסק בשאלת היסוד של דיני הקניין: מה הופך זכות לזכות 'קניינית', ומה ההבדל המהותי בינה לבין זכות אישית או חוזית. הוא בוחן את משטרי הבעלות האפשריים במשאבים \u2014 בין הפרטה, שליטה ציבורית והנחה משותפת \u2014 ואת היתרונות והכשלים האפשריים בכל אחד מהם. לבסוף, הוא מציג את התובנה שגם זכות קניינית מוכרת אינה בלתי מוגבלת, אלא כפופה תמיד לאיזון עם זכויות וערכים נוגדים.",
       study:{
         sections:[
           {title:"מהות הזכות הקניינית",points:[
@@ -279,6 +275,7 @@ const DB = {
       ]}
     },
     possession:{
+      summary:"פרק זה בוחן כיצד נוצרת ונרכשת בעלות בנכס מלכתחילה, ומה ההבדל בין השליטה המשפטית המלאה (בעלות) לבין השליטה הפיזית בפועל (חזקה). הוא מסביר מדוע למחזיק בנכס, אף שאינו בעליו, מוקנית הגנה משפטית מסוימת, ומהן הדרכים המוכרות להפוך שליטה עובדתית או פעולה משפטית לזכות בעלות מלאה ומוגנת.",
       study:{
         sections:[
           {
@@ -568,6 +565,7 @@ const DB = {
       ]}
     },
     sharing:{
+      summary:"פרק זה עוסק בזכויות מצומצמות שמקנה בעל נכס לאדם אחר בנכס שלו, בלי להעביר את הבעלות עצמה. הוא בוחן את האיזון בין האינטרס של הבעלים לשמור על שליטתו לבין הצורך לאפשר לאחרים שימוש, הנאה או ביטחון בנכס \u2014 לתקופה מוגבלת או למטרה מסוימת. הדיון מבהיר כיצד נוצרות זכויות כאלה, מהי עוצמתן כלפי צדדים שלישיים, וכיצד הן מסתיימות.",
       study:{
         sections:[
           {title:"שכירות וחכירה — הגדרה, מאפיינים וסיווג (מצגות 8–9)",points:[
@@ -696,6 +694,7 @@ const DB = {
       ]}
     },
     competition:{
+      summary:"פרק זה דן במצב שבו אותו נכס, או אותה זכות בו, הוענק על ידי בעל זכות אחד ליותר מצד אחד \u2014 ושני (או יותר) טוענים זכאות חוקית לאותו נכס. הוא בוחן כיצד המשפט קובע סדרי עדיפויות בין זכויות מתחרות, מהם השיקולים המכריעים בין הצדדים, ובאיזו מידה מוגן מי שרכש זכות בתום לב ובהסתמך על המצב הנראה לעין, אל מול מי שזכותו נוצרה קודם בזמן.",
       study:{
         sections:[
           {
@@ -937,6 +936,7 @@ const DB = {
 
     },
     ownership:{
+      summary:"פרק זה עוסק במצב שבו כמה אנשים מחזיקים יחד באותה זכות קניינית באותו נכס, ובדילמות הנובעות מכך: כיצד מתקבלות הכרעות בנוגע לשימוש בנכס המשותף, מה קורה כשהשותפים חלוקים בדעתם, ומהי הדרך לצאת ממצב של שיתוף כשהוא אינו רצוי יותר לאחד הצדדים. הדיון בוחן את האיזון העדין שבין שמירה על האוטונומיה של כל שותף לבין הצורך בניהול משותף ויעיל של הנכס.",
       study:{
         sections:[
           {title:"שיתוף בנכסים – יחסי שיתוף (מצגות 5–6)",points:[
@@ -1018,6 +1018,7 @@ const DB = {
       ]}
     },
     ip:{
+      summary:"פרק זה בוחן כיצד מוקנית הגנה קניינית ליצירה רעיונית או מסחרית בלתי מוחשית \u2014 כגון פטנט, סימן מסחר או יצירה מקורית \u2014 שמטבעה ניתנת לחיקוי וריבוי בלתי מוגבל. הוא דן בשאלה מהו האיזון הראוי בין עידוד יצירה וחדשנות לבין האינטרס הציבורי בנגישות ובתחרות חופשית, ומציג את הדרכים החלופיות להגנה כאשר ההגנה הסטטוטורית הישירה אינה חלה.",
       study:{
         sections:[
           {title:"מקורות חלופיים להגנה בקניין רוחני (מצגת 22)",points:[
@@ -1113,6 +1114,7 @@ const DB = {
       ]}
     },
     urban:{
+      summary:"פרק זה עוסק במתח הקנייני המיוחד הנוצר בפרויקטים של חידוש מבנים ושכונות ישנות, שבהם נדרשת הסכמה של ריבוי בעלי דירות לפעולה משותפת בנכס המשותף. הוא בוחן כיצד המשפט מתמודד עם הסירוב של מיעוט בעלים לשנות את המצב הקיים, ומהו האיזון הראוי בין זכות הקניין הפרטית של הסרבן לבין התכלית הציבורית של שיפור הדיור, הבטיחות והתשתיות.",
       study:{
         sections:[
           {title:"מהי התחדשות עירונית? (מצגת 23)",points:[
@@ -1202,9 +1204,12 @@ var S={cat:"foundations",tab:"study",answers:{},shown:{},scores:{}};
 
 function tag(t){return '<span class="'+(t.t==="c"?"tc":"tl")+'">'+t.v+'</span>';}
 
-function renderStudy(d){
+function renderStudy(d,summary){
   if(!d)return cs();
   var h="";
+  if(summary){
+    h+='<div class="chap-summary"><div class="chap-summary-label"><span class="line"></span><span>תמונת מבט כללית</span></div><p>'+summary+"</p></div>";
+  }
   d.sections.forEach(function(sec){
     h+='<div class="card"><h3>'+sec.title+"</h3>";
     sec.points.forEach(function(p){
@@ -1401,12 +1406,9 @@ function renderContent(){
   var has=cnt&&cnt.study!==null;
   document.getElementById("hdr-eyebrow").textContent=cat.icon+" "+cat.sub;
   document.getElementById("hdr-title").textContent=cat.label;
-  var sb=document.getElementById("hdr-status");
-  sb.textContent="✅ תוכן זמין";
-  sb.className="sbadge s-active";
   var html="";
   if(!has)html=cs();
-  else if(S.tab==="study")html=renderStudy(cnt.study);
+  else if(S.tab==="study")html=renderStudy(cnt.study,cnt.summary);
   else if(S.tab==="practice")html=renderPractice(cnt.practice);
   else html=renderMedia(cnt.media);
   document.getElementById("content-area").innerHTML=html;
