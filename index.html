@@ -48,6 +48,12 @@
     .chap-summary-label{display:flex;align-items:center;gap:7px;font-size:0.68rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;}
     .chap-summary-label .line{flex:0 0 22px;height:1px;background:var(--gold-light);}
     .chap-summary p{font-family:'Frank Ruhl Libre',serif;font-size:1.16rem;font-weight:400;line-height:1.85;color:#2d2a3d;letter-spacing:.01em;}
+    /* Core cases */
+    .core-cases{background:linear-gradient(160deg,#f3f6fb 0%,#fafbfd 65%);border:1px solid #dbe4f0;border-radius:14px;padding:18px 22px;margin-bottom:24px;}
+    .core-cases-title{display:flex;align-items:center;gap:7px;font-size:0.74rem;font-weight:700;color:#3b5a82;text-transform:uppercase;letter-spacing:.08em;margin-bottom:13px;}
+    .core-cases-list{display:flex;flex-wrap:wrap;gap:9px;}
+    .core-case-badge{display:inline-flex;align-items:center;gap:7px;background:#ffffff;border:1px solid #d7e1ef;color:#2d3c52;font-size:0.83rem;font-weight:600;line-height:1.4;padding:8px 14px;border-radius:30px;box-shadow:0 1px 2px rgba(45,60,82,0.05);}
+    .core-case-badge .ccb-ic{font-size:0.85rem;flex-shrink:0;}
     .card h3{font-family:'Frank Ruhl Libre',serif;font-size:1.1rem;color:var(--ink);margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--gold-light);}
     .brow{display:flex;gap:10px;margin-bottom:10px;align-items:flex-start;}
     .bdot{width:7px;height:7px;background:var(--gold);border-radius:50%;margin-top:7px;flex-shrink:0;}
@@ -119,6 +125,17 @@
     audio{width:100%;height:36px;}
     .podlink{display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:#fde68a;text-decoration:none;border-radius:8px;padding:11px 18px;font-size:0.85rem;font-weight:700;transition:background .15s,transform .15s;}
     .podlink:hover{background:var(--gold);color:#1a1a2e;transform:translateY(-1px);}
+    /* Case video slots */
+    .vcard{background:white;border:1px solid var(--border);border-radius:14px;padding:18px 20px;margin-bottom:12px;box-shadow:0 1px 3px rgba(26,26,46,0.04),0 8px 24px -8px rgba(26,26,46,0.07);}
+    .vcard.empty{border-style:dashed;border-color:#c7d4e6;background:#fbfcfe;box-shadow:none;}
+    .vrow{display:flex;gap:13px;align-items:center;}
+    .vthumb{width:46px;height:46px;border-radius:9px;background:linear-gradient(135deg,#2d4a73,#4a6da3);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;color:#fff;}
+    .vthumb.empty{background:#eef2f8;color:#9bb0cc;}
+    .vtitle{font-weight:700;font-size:0.88rem;color:var(--ink);line-height:1.5;}
+    .vstatus{font-size:0.76rem;color:#16a34a;font-weight:600;margin-top:3px;}
+    .vstatus.pending{color:#94a3b8;font-weight:600;}
+    .videolink{display:inline-flex;align-items:center;gap:8px;background:#2d4a73;color:#fff;text-decoration:none;border-radius:8px;padding:10px 16px;font-size:0.83rem;font-weight:700;margin-top:13px;transition:background .15s,transform .15s;}
+    .videolink:hover{background:#1f3656;transform:translateY(-1px);}
     /* Coming soon */
     .csoon{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:70px 40px;text-align:center;}
     .csicon{font-size:4rem;margin-bottom:14px;}
@@ -191,6 +208,11 @@ const DB = {
   content:{
     foundations:{
       summary:"פרק זה עוסק בשאלת היסוד של דיני הקניין: מה הופך זכות לזכות 'קניינית', ומה ההבדל המהותי בינה לבין זכות אישית או חוזית. הוא בוחן את משטרי הבעלות האפשריים במשאבים \u2014 בין הפרטה, שליטה ציבורית והנחה משותפת \u2014 ואת היתרונות והכשלים האפשריים בכל אחד מהם. לבסוף, הוא מציג את התובנה שגם זכות קניינית מוכרת אינה בלתי מוגבלת, אלא כפופה תמיד לאיזון עם זכויות וערכים נוגדים.",
+      coreCases:[
+        "ע\"א 2850/99 בן חמו נ' טנא נוגה בע\"מ",
+        "רע\"א 6339/97 רוקר נ' סלומון",
+        "בג\"ץ 5578/02 מנור נ' שר האוצר",
+      ],
       study:{
         sections:[
           {title:"מהות הזכות הקניינית",points:[
@@ -272,10 +294,22 @@ const DB = {
       ]},
       media:{files:[
         {id:"m1",title:"פודקאסט: הקניין – מהות, משטר ותחולה",desc:"NotebookLM | כ-20 דקות | מצגת 1",file:"https://notebooklm.google.com/notebook/3598e0ae-28e5-4b27-a926-dc19fd265a4f/artifact/d4e0a92c-6d16-49aa-95ef-737219f92fb3?utm_source=nlm_web_share&utm_medium=google_oo&utm_campaign=art_share_1&utm_content=&utm_smc=nlm_web_share_google_oo_art_share_1_"},
+      ],caseVideos:[
+        {case:"ע\"א 2850/99 בן חמו נ' טנא נוגה בע\"מ",url:null},
+        {case:"רע\"א 6339/97 רוקר נ' סלומון",url:null},
+        {case:"בג\"ץ 5578/02 מנור נ' שר האוצר",url:null},
       ]}
     },
     possession:{
       summary:"פרק זה בוחן כיצד נוצרת ונרכשת בעלות בנכס מלכתחילה, ומה ההבדל בין השליטה המשפטית המלאה (בעלות) לבין השליטה הפיזית בפועל (חזקה). הוא מסביר מדוע למחזיק בנכס, אף שאינו בעליו, מוקנית הגנה משפטית מסוימת, ומהן הדרכים המוכרות להפוך שליטה עובדתית או פעולה משפטית לזכות בעלות מלאה ומוגנת.",
+      coreCases:[
+        "ע\"א 591/76 דלרחיים נ' מדינת ישראל",
+        "ע\"א 520/89 מדינת ישראל נ' שבלי",
+        "רע\"א 5518/98 יוסף נ' עוקשי",
+        "רע\"א 4657/21 ישראל מאיר כהן נ' משה\"ב חברה לבניין ופיתוח בע\"מ",
+        "רע\"א 4311/00 מדינת ישראל נ' בן שמחון",
+        "ע\"א 8661/10 נעמה נ' טורקיה",
+      ],
       study:{
         sections:[
           {
@@ -562,10 +596,25 @@ const DB = {
       },
       media:{files:[
         {id:"m2",title:"פודקאסט: בעלות בנכסים",desc:"NotebookLM | כ-25 דקות | מצגות 2–4",file:"https://notebooklm.google.com/notebook/3598e0ae-28e5-4b27-a926-dc19fd265a4f/artifact/266f3957-3691-4a82-b975-b09a32daa8f7?utm_source=nlm_web_share&utm_medium=google_oo&utm_campaign=art_share_1&utm_content=&utm_smc=nlm_web_share_google_oo_art_share_1_"},
+      ],caseVideos:[
+        {case:"ע\"א 591/76 דלרחיים נ' מדינת ישראל",url:null},
+        {case:"ע\"א 520/89 מדינת ישראל נ' שבלי",url:null},
+        {case:"רע\"א 5518/98 יוסף נ' עוקשי",url:null},
+        {case:"רע\"א 4657/21 ישראל מאיר כהן נ' משה\"ב חברה לבניין ופיתוח בע\"מ",url:null},
+        {case:"רע\"א 4311/00 מדינת ישראל נ' בן שמחון",url:null},
+        {case:"ע\"א 8661/10 נעמה נ' טורקיה",url:null},
       ]}
     },
     sharing:{
       summary:"פרק זה עוסק בזכויות מצומצמות שמקנה בעל נכס לאדם אחר בנכס שלו, בלי להעביר את הבעלות עצמה. הוא בוחן את האיזון בין האינטרס של הבעלים לשמור על שליטתו לבין הצורך לאפשר לאחרים שימוש, הנאה או ביטחון בנכס \u2014 לתקופה מוגבלת או למטרה מסוימת. הדיון מבהיר כיצד נוצרות זכויות כאלה, מהי עוצמתן כלפי צדדים שלישיים, וכיצד הן מסתיימות.",
+      coreCases:[
+        "ע\"א 2821/95 לוסטיג נ' מייזלס",
+        "ע\"א 7139/99 אלוני נ' ארד",
+        "ע\"א 4294/97 אובזילר נ' בנק דיסקונט לישראל",
+        "ע\"א 455/89 קולומבו נ' בנק למסחר",
+        "ע\"א 1679/01 משכן בנק הפועלים למשכנתאות נ' שפייזמן",
+        "ע\"א 9136/02 מיסטר מאני ישראל בע\"מ נ' שרה רייז",
+      ],
       study:{
         sections:[
           {title:"שכירות וחכירה — הגדרה, מאפיינים וסיווג (מצגות 8–9)",points:[
@@ -691,10 +740,27 @@ const DB = {
       },
       media:{files:[
         {id:"m4",title:"פודקאסט: זכויות בנכסי הזולת – שכירות, שעבודים ומשכנתא",desc:"NotebookLM | כ-30 דקות | מצגות 8–12",file:"https://notebooklm.google.com/notebook/3598e0ae-28e5-4b27-a926-dc19fd265a4f/artifact/3c94ea88-f31b-4fb1-9c56-9c26563cfa06?utm_source=nlm_web_share&utm_medium=google_oo&utm_campaign=art_share_1&utm_content=&utm_smc=nlm_web_share_google_oo_art_share_1_"},
+      ],caseVideos:[
+        {case:"ע\"א 2821/95 לוסטיג נ' מייזלס",url:null},
+        {case:"ע\"א 7139/99 אלוני נ' ארד",url:null},
+        {case:"ע\"א 4294/97 אובזילר נ' בנק דיסקונט לישראל",url:null},
+        {case:"ע\"א 455/89 קולומבו נ' בנק למסחר",url:null},
+        {case:"ע\"א 1679/01 משכן בנק הפועלים למשכנתאות נ' שפייזמן",url:null},
+        {case:"ע\"א 9136/02 מיסטר מאני ישראל בע\"מ נ' שרה רייז",url:null},
       ]}
     },
     competition:{
       summary:"פרק זה דן במצב שבו אותו נכס, או אותה זכות בו, הוענק על ידי בעל זכות אחד ליותר מצד אחד \u2014 ושני (או יותר) טוענים זכאות חוקית לאותו נכס. הוא בוחן כיצד המשפט קובע סדרי עדיפויות בין זכויות מתחרות, מהם השיקולים המכריעים בין הצדדים, ובאיזו מידה מוגן מי שרכש זכות בתום לב ובהסתמך על המצב הנראה לעין, אל מול מי שזכותו נוצרה קודם בזמן.",
+      coreCases:[
+        "ע\"א 2643/97 גנז נ' בריטיש קולוניאל חברה בע\"מ",
+        "ע\"א 189/95 בנק אוצר החייל נ' אהרונוב",
+        "ע\"א 790/97 הבנק המזרחי המאוחד נ' גדי",
+        "ע\"א 3042/19 ורדי נ' רייכמן",
+        "ע\"א 2907/04 סופיוב נ' עזבון סופיוב",
+        "ע\"א 7654/07 ברקוביץ' נ' קורין",
+        "ע\"א 886/97 בורשטיין נ' חודאד",
+        "דנ\"א 2568/97 כנען נ' ממשלת ארצות הברית",
+      ],
       study:{
         sections:[
           {
@@ -932,11 +998,28 @@ const DB = {
       },
       media:{files:[
         {id:"m5",title:"פודקאסט: תחרות בין בעלי זכויות",desc:"NotebookLM | כ-35 דקות | מצגות 13–21",file:"https://notebooklm.google.com/notebook/3598e0ae-28e5-4b27-a926-dc19fd265a4f/artifact/e5389d03-124b-45e4-8965-8b2f434d4698?utm_source=nlm_web_share&utm_medium=google_oo&utm_campaign=art_share_1&utm_content=&utm_smc=nlm_web_share_google_oo_art_share_1_"},
+      ],caseVideos:[
+        {case:"ע\"א 2643/97 גנז נ' בריטיש קולוניאל חברה בע\"מ",url:null},
+        {case:"ע\"א 189/95 בנק אוצר החייל נ' אהרונוב",url:null},
+        {case:"ע\"א 790/97 הבנק המזרחי המאוחד נ' גדי",url:null},
+        {case:"ע\"א 3042/19 ורדי נ' רייכמן",url:null},
+        {case:"ע\"א 2907/04 סופיוב נ' עזבון סופיוב",url:null},
+        {case:"ע\"א 7654/07 ברקוביץ' נ' קורין",url:null},
+        {case:"ע\"א 886/97 בורשטיין נ' חודאד",url:null},
+        {case:"דנ\"א 2568/97 כנען נ' ממשלת ארצות הברית",url:null},
       ]}
 
     },
     ownership:{
       summary:"פרק זה עוסק במצב שבו כמה אנשים מחזיקים יחד באותה זכות קניינית באותו נכס, ובדילמות הנובעות מכך: כיצד מתקבלות הכרעות בנוגע לשימוש בנכס המשותף, מה קורה כשהשותפים חלוקים בדעתם, ומהי הדרך לצאת ממצב של שיתוף כשהוא אינו רצוי יותר לאחד הצדדים. הדיון בוחן את האיזון העדין שבין שמירה על האוטונומיה של כל שותף לבין הצורך בניהול משותף ויעיל של הנכס, ופורש את ההסדר על פני שלוש תמונות: שיתוף קלאסי במקרקעין (יסודות, הסכמי שיתוף, פירוק), שיתוף מובנה בבית משותף (רכוש משותף, הצמדות, ניהול), ושיתוף נכסים בין בני זוג (חזקת השיתוף וחוק יחסי ממון).",
+      coreCases:[
+        "ע\"א 458/82 וילנר נ' גולני",
+        "רע\"א 1017/97 רידלביץ נ' מודעי",
+        "ד\"נ 20/73 שמע נ' סדובסקי",
+        "רע\"א 7112/93 צודלר נ' יוסף",
+        "ע\"א 52/80 שחר נ' פרידמן",
+        "ע\"א 1915/91 יעקובי נ' יעקובי",
+      ],
       study:{
         sections:[
           {title:"יסודות השיתוף בנכסים (מצגת 5)",points:[
@@ -1108,10 +1191,24 @@ const DB = {
       ]},
       media:{files:[
         {id:"m_own",title:"פודקאסט: שיתוף בנכסים ובתים משותפים",desc:"NotebookLM | כ-20 דקות | מצגות 5–7",file:"https://notebooklm.google.com/notebook/3598e0ae-28e5-4b27-a926-dc19fd265a4f/artifact/401a2be1-541f-4855-8a53-aac2e30d6e78?utm_source=nlm_web_share&utm_medium=google_oo&utm_campaign=art_share_1&utm_content=&utm_smc=nlm_web_share_google_oo_art_share_1_"},
+      ],caseVideos:[
+        {case:"ע\"א 458/82 וילנר נ' גולני",url:null},
+        {case:"רע\"א 1017/97 רידלביץ נ' מודעי",url:null},
+        {case:"ד\"נ 20/73 שמע נ' סדובסקי",url:null},
+        {case:"רע\"א 7112/93 צודלר נ' יוסף",url:null},
+        {case:"ע\"א 52/80 שחר נ' פרידמן",url:null},
+        {case:"ע\"א 1915/91 יעקובי נ' יעקובי",url:null},
       ]}
     },
     ip:{
       summary:"פרק זה בוחן כיצד מוקנית הגנה קניינית ליצירה רעיונית או מסחרית בלתי מוחשית \u2014 כגון פטנט, סימן מסחר או יצירה מקורית \u2014 שמטבעה ניתנת לחיקוי וריבוי בלתי מוגבל. הוא דן בשאלה מהו האיזון הראוי בין עידוד יצירה וחדשנות לבין האינטרס הציבורי בנגישות ובתחרות חופשית, ומציג את הדרכים החלופיות להגנה כאשר ההגנה הסטטוטורית הישירה אינה חלה.",
+      coreCases:[
+        "ע\"א 8483/02 אלוניאל בע\"מ נ' אריאל מקדונלד",
+        "ע\"א 563/11 Adidas Salomon נ' ג'לאל יאסין",
+        "רע\"א 5768/94 א.ש.י.ר יבוא יצור והפצה נ' פורום אביזרים",
+        "ע\"א 3425/17 Nestle Produits des Societe נ' אספרסו קלאב",
+        "ע\"א 1898/12 מרכז המתנות 2006 בע\"מ נ' קארשי אינטרנשיונל",
+      ],
       study:{
         sections:[
           {title:"סוגי הקניין הרוחני ומאפייניו הכלכליים (מצגת 20)",points:[
@@ -1232,10 +1329,21 @@ const DB = {
       ]},
       media:{files:[
         {id:"m7",title:"פודקאסט: מבוא לקניין רוחני",desc:"NotebookLM | כ-30 דקות | מצגות 20, 22",file:"https://notebooklm.google.com/notebook/3598e0ae-28e5-4b27-a926-dc19fd265a4f/artifact/fe8a4a30-1a5a-4cc3-890f-270e15f6bc36?utm_source=nlm_web_share&utm_medium=google_oo&utm_campaign=art_share_1&utm_content=&utm_smc=nlm_web_share_google_oo_art_share_1_"},
+      ],caseVideos:[
+        {case:"ע\"א 8483/02 אלוניאל בע\"מ נ' אריאל מקדונלד",url:null},
+        {case:"ע\"א 563/11 Adidas Salomon נ' ג'לאל יאסין",url:null},
+        {case:"רע\"א 5768/94 א.ש.י.ר יבוא יצור והפצה נ' פורום אביזרים",url:null},
+        {case:"ע\"א 3425/17 Nestle Produits des Societe נ' אספרסו קלאב",url:null},
+        {case:"ע\"א 1898/12 מרכז המתנות 2006 בע\"מ נ' קארשי אינטרנשיונל",url:null},
       ]}
     },
     urban:{
       summary:"פרק זה עוסק במתח הקנייני המיוחד הנוצר בפרויקטים של חידוש מבנים ושכונות ישנות, שבהם נדרשת הסכמה של ריבוי בעלי דירות לפעולה משותפת בנכס המשותף. הוא בוחן כיצד המשפט מתמודד עם הסירוב של מיעוט בעלים לשנות את המצב הקיים, ומהו האיזון הראוי בין זכות הקניין הפרטית של הסרבן לבין התכלית הציבורית של שיפור הדיור, הבטיחות והתשתיות.",
+      coreCases:[
+        "ע\"א 3511/13 שורצברגר נ' מרין ואח'",
+        "רע\"א 9626/05 נציגות הבית המשותף מרחוב הרב עמיאל 7 תל אביב נ' אבימור",
+        "בג\"ץ 244/00 עמותת שיח חדש נ' שר התשתיות הלאומיות",
+      ],
       study:{
         sections:[
           {title:"מהי התחדשות עירונית? (מצגת 23)",points:[
@@ -1326,6 +1434,10 @@ const DB = {
       ]},
       media:{files:[
         {id:"m8",title:"פודקאסט: התחדשות עירונית",desc:"NotebookLM | כ-25 דקות | מצגת 23",file:"https://notebooklm.google.com/notebook/3598e0ae-28e5-4b27-a926-dc19fd265a4f/artifact/5c2ba731-c4f9-4dc1-9007-35197ef05ac8?utm_source=nlm_web_share&utm_medium=google_oo&utm_campaign=art_share_1&utm_content=&utm_smc=nlm_web_share_google_oo_art_share_1_"},
+      ],caseVideos:[
+        {case:"ע\"א 3511/13 שורצברגר נ' מרין ואח'",url:null},
+        {case:"רע\"א 9626/05 נציגות הבית המשותף מרחוב הרב עמיאל 7 תל אביב נ' אבימור",url:null},
+        {case:"בג\"ץ 244/00 עמותת שיח חדש נ' שר התשתיות הלאומיות",url:null},
       ]}
     },
   }
@@ -1335,11 +1447,16 @@ var S={cat:"foundations",tab:"study",answers:{},shown:{},scores:{}};
 
 function tag(t){return '<span class="'+(t.t==="c"?"tc":"tl")+'">'+t.v+'</span>';}
 
-function renderStudy(d,summary){
+function renderStudy(d,summary,coreCases){
   if(!d)return cs();
   var h="";
   if(summary){
     h+='<div class="chap-summary"><div class="chap-summary-label"><span class="line"></span><span>תמונת מבט כללית</span></div><p>'+summary+"</p></div>";
+  }
+  if(coreCases&&coreCases.length){
+    h+='<div class="core-cases"><div class="core-cases-title"><span>⚖️ פסקי דין שהם לב הפרק</span></div><div class="core-cases-list">'+
+      coreCases.map(function(c){return'<span class="core-case-badge"><span class="ccb-ic">⚖️</span>'+c+"</span>";}).join("")+
+      "</div></div>";
   }
   d.sections.forEach(function(sec){
     h+='<div class="card"><h3>'+sec.title+"</h3>";
@@ -1517,6 +1634,17 @@ function renderMedia(d){
     }
     h+="</div>";
   });
+  if(d.caseVideos&&d.caseVideos.length){
+    h+='<div class="card" style="font-size:.84rem;color:#374151;margin-top:6px"><strong>🎬 סרטוני פסקי דין מובילים</strong><br><span style="color:#718096">מקום מוכן לכל סרטון שיוקדש להסברת אחת ההלכות המרכזיות של הפרק. לכל פסק דין יש כאן \u201cחריץ\u201d שמחכה לקישור.</span></div>';
+    d.caseVideos.forEach(function(v){
+      var has=!!v.url;
+      h+='<div class="vcard'+(has?"":" empty")+'"><div class="vrow"><div class="vthumb'+(has?"":" empty")+'">'+(has?"🎬":"⚖️")+'</div><div><div class="vtitle">'+v.case+'</div><div class="vstatus'+(has?"":" pending")+'">'+(has?"✓ סרטון הועלה":"טרם הועלה סרטון")+"</div></div></div>";
+      if(has){
+        h+='<a class="videolink" href="'+v.url+'" target="_blank" rel="noopener noreferrer">▶️ צפייה בסרטון</a>';
+      }
+      h+="</div>";
+    });
+  }
   return h;
 }
 
@@ -1539,7 +1667,7 @@ function renderContent(){
   document.getElementById("hdr-title").textContent=cat.label;
   var html="";
   if(!has)html=cs();
-  else if(S.tab==="study")html=renderStudy(cnt.study,cnt.summary);
+  else if(S.tab==="study")html=renderStudy(cnt.study,cnt.summary,cnt.coreCases);
   else if(S.tab==="practice")html=renderPractice(cnt.practice);
   else html=renderMedia(cnt.media);
   document.getElementById("content-area").innerHTML=html;
