@@ -162,6 +162,35 @@
       .content-area{padding:18px 16px;max-width:100%;width:100%;}
       .fbranches{grid-template-columns:1fr;}
     }
+    /* ── Exam Practice Center (מרכז תרגול מקיף) ── */
+    .exam-tip{background:#fffbeb;border:1px solid #fcd34d;border-radius:10px;padding:13px 17px;margin-bottom:22px;font-size:.85rem;color:#92400e;line-height:1.7}
+    .exam-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    @media (max-width:768px){.exam-grid{grid-template-columns:1fr}}
+    .exam-card{background:white;border:1px solid var(--border);border-radius:14px;padding:20px 22px;cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:0 1px 3px rgba(26,26,46,0.04),0 8px 24px -8px rgba(26,26,46,0.07);position:relative;overflow:hidden}
+    .exam-card::before{content:"";position:absolute;top:0;right:0;width:5px;height:100%;background:linear-gradient(180deg,var(--gold) 0%,var(--gold-light) 100%)}
+    .exam-card:hover{transform:translateY(-2px);box-shadow:0 6px 18px -4px rgba(184,134,11,0.25)}
+    .exam-card-num{display:inline-block;background:var(--ink);color:#fde68a;font-size:.68rem;font-weight:800;padding:3px 11px;border-radius:20px;margin-bottom:9px}
+    .exam-card-title{font-family:'Frank Ruhl Libre',serif;font-weight:700;font-size:1rem;color:var(--ink);margin-bottom:7px;line-height:1.45}
+    .exam-card-blurb{font-size:.82rem;color:#718096;line-height:1.65;margin-bottom:12px}
+    .exam-card-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+    .exam-card-open{font-size:.78rem;font-weight:700;color:var(--gold)}
+    .exam-back{background:none;border:1.5px solid var(--border);border-radius:20px;padding:7px 16px;font-size:.82rem;font-weight:600;color:#718096;cursor:pointer;font-family:'Assistant',sans-serif;margin-bottom:16px;transition:all .15s}
+    .exam-back:hover{border-color:var(--gold);color:var(--gold)}
+    .exam-detail-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+    .exam-detail-title{font-family:'Frank Ruhl Libre',serif;font-weight:700;font-size:1.14rem;color:var(--ink);line-height:1.45}
+    .exam-diff-badge{background:#fef3c7;color:#92400e;font-size:.7rem;font-weight:800;padding:4px 12px;border-radius:20px;white-space:nowrap;flex-shrink:0}
+    .exam-facts{font-size:.89rem;color:#374151;line-height:1.9;text-align:justify;margin:13px 0 4px}
+    .exam-facts p{margin-bottom:11px}
+    .exam-subq-wrap{margin-top:10px}
+    .irac-block{background:var(--gold-pale);border:1px solid var(--gold-light);border-radius:12px;padding:15px 17px;margin-bottom:14px}
+    .irac-lbl{display:flex;align-items:center;gap:9px;font-weight:700;font-size:.9rem;color:var(--ink);margin-bottom:7px}
+    .irac-letter{min-width:26px;height:26px;background:var(--gold);color:white;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:800;flex-shrink:0}
+    .irac-hint{font-size:.78rem;color:#718096;line-height:1.55;margin-bottom:9px}
+    .matrix-table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:4px}
+    .matrix-table th{background:var(--ink);color:#fde68a;padding:8px 11px;font-weight:700;text-align:right}
+    .matrix-table td{padding:9px 11px;border-bottom:1px solid var(--gold-light);vertical-align:top;color:#374151}
+    .matrix-table tr:nth-child(even) td{background:#fffaf0}
+    .matrix-pts{display:inline-block;background:#dcfce7;color:#15803d;font-weight:800;border-radius:20px;padding:2px 11px;font-size:.78rem;white-space:nowrap}
   </style>
 </head>
 <body>
@@ -175,6 +204,8 @@
     </div>
     <div class="nav-sec-lbl">נושאי הקורס</div>
     <nav id="nav-items"></nav>
+    <div class="nav-sec-lbl">כלים נוספים</div>
+    <nav id="nav-extra"></nav>
     <div class="sidebar-footer"><div class="sf-txt">עדכון אחרון: יוני 2026</div></div>
   </aside>
   <main id="main">
@@ -185,7 +216,7 @@
           <div class="header-title" id="hdr-title"></div>
         </div>
       </div>
-      <div class="tab-bar">
+      <div class="tab-bar" id="tab-bar">
         <button class="tab-btn active" data-tab="study" onclick="switchTab('study')">📘 מצב לימוד</button>
         <button class="tab-btn" data-tab="practice" onclick="switchTab('practice')">📝 סימולטור תרגול</button>
         <button class="tab-btn" data-tab="media" onclick="switchTab('media')">🎧 ספריית מדיה</button>
@@ -1443,7 +1474,186 @@ const DB = {
   }
 };
 
-var S={cat:"foundations",tab:"study",answers:{},shown:{},scores:{}};
+var S={cat:"foundations",tab:"study",mode:"category",answers:{},shown:{},scores:{},examCase:null,examAnswers:{},examSolutionShown:{}};
+
+// ─── MASTER_CASES: מרכז תרגול מקיף (קייסים מסכמים) ─────────────────
+// כל קייס משלב כמה דוקטרינות מתוך פרקי הקורס (בעיקר "תחרות בין בעלי
+// זכויות", "שיתוף בנכסים" ו"זכויות בנכסי הזולת"), בהתבסס בלעדית על
+// ההלכות, הסעיפים והמושגים המופיעים ב-DB לעיל. אין כאן הלכה או סעיף
+// שאינו מעוגן באחד מפרקי האתר.
+var MASTER_CASES=[
+  {
+    id:"case1",
+    num:"תיק א׳",
+    title:"שני המוכרים של דירת רחוב הדס 14, חיפה",
+    diff:"רמת קושי: עבודת אמצע",
+    tags:["עסקאות נוגדות","הלכת בונוראה","הלכת גנז","תקנת השוק – מתחזה"],
+    blurb:"קונה ראשון בלתי-רשום, נושה מעקל, ורוכשת שנייה שהסתמכה על מסמך מזויף — שלוש זכויות מתחרות על נכס אחד.",
+    facts:[
+      "גב' רחל אשכולי היא הבעלים הרשום היחיד של דירת שלושה חדרים ברחוב הדס 14, חיפה (\"הדירה\"). ביוני 2019 חתמה רחל על חוזה מכר עם מר אבנר תורג'מן, לפיו מכרה לו את הדירה בתמורה ל-1,450,000 ₪. אבנר שילם לרחל 70% מהתמורה במזומן עוד באותו חודש, ונותרה יתרה לתשלום לכשתושלם העברת הזכויות בלשכת רישום המקרקעין. בשל יציאתו הצפויה לשליחות עבודה ארוכה בחו\"ל, הסכימו הצדדים כי הרישום ייעשה רק לכשישוב ארצה. אבנר לא רשם הערת אזהרה לפני נסיעתו.",
+      "בספטמבר 2021, בעת שאבנר טרם שב לישראל, פנה \"בנק הצפון\" לבית המשפט בתביעה לפירעון הלוואה פרטית שנתן לרחל שנים קודם לכן. לאחר שקיבל פסק דין לטובתו, רשם הבנק עיקול על הדירה כבטוחה לחוב בסך 310,000 ₪.",
+      "בתחילת 2022 פנה אל עו\"ד פלוני אדם שהציג יפוי כוח, לכאורה חתום בידי רחל, ולפיו הוא מוסמך למכור את הדירה בשמה. בהתבסס על יפוי הכוח, נמכרה הדירה לגב' שרון כספי, ששילמה את מלוא התמורה, בדקה את נסח הרישום בטאבו (בו לא נמצא כל זכר לחוזה עם אבנר, שלא נרשם), ונרשמה כבעלים בלשכת רישום המקרקעין על בסיס אותו יפוי כוח.",
+      "בתחילת 2023 התברר כי יפוי הכוח שהוצג היה מזויף, וכי רחל מעולם לא מינתה את אותו אדם ולא ידעה על המכירה לשרון. רחל עצמה גם לא ידעה על העיקול עד שפנה אליה הבנק. אבנר, שחזר ארצה ופנה לראשונה לרשום את זכויותיו, גילה כי הדירה רשומה כעת על שם שרון."
+    ],
+    subQuestions:[
+      {label:"סעיף א׳",text:"דונו בזכויותיו של אבנר תורג'מן כלפי בנק הצפון, נושה של רחל אשכולי שהטיל את העיקול."},
+      {label:"סעיף ב׳",text:"דונו בתחרות שבין אבנר תורג'מן לבין שרון כספי, ובשאלה אם תקנת השוק (ס' 10 לחוק המקרקעין) עומדת לזכותה."}
+    ],
+    solution:{
+      issues:[
+        "האם לאבנר, כבעל חוזה בלתי-רשום, זכות הגוברת על נושה כללי (בנק הצפון) שהטיל עיקול על הדירה?",
+        "האם רכישתה של שרון מאדם שהתחזה לרחל באמצעות יפוי כוח מזויף, מקנה לה זכות כלשהי כלפי אבנר, ובפרט – האם תקנת השוק (ס' 10 לחוק המקרקעין) חלה לטובתה?"
+      ],
+      rule:[
+        "הלכת בונוראה (ע\"א 189/95): קונה בעל חוזה (גם בלתי-רשום) מקבל זכות מעין-קניינית הגוברת על נושים ועוקלים מאוחרים של המוכר, גם ללא הערת אזהרה.",
+        "פסד גדי (ע\"א 790/97): הלכת גנז לא חלה על תחרות עם נושים כלליים; אי-רישום הערת אזהרה אינו מסייע לנושה לא-מובטח.",
+        "כלל יסוד: מי שאינו הבעלים הרשום (מתחזה) אינו יכול להעביר זכות שאין לו בנכס.",
+        "ס' 10 לחוק המקרקעין (תקנת השוק) מגן רק על קונה שהוטעה משגגה פנימית של משרד רישום המקרקעין (ע\"א 2267/95 הרטפלד); אינו מגן על קונה שהסתמך על יפוי כוח מזויף או מסמך חיצוני אחר – זהו סיכון חיצוני למשרד (ע\"א 2680/90 מוזאפר; ע\"א 3391/22 קניפנוק). תקנת השוק חלה רק כשהקונה רכש זכות ישירות מהבעלים הרשום בפועל."
+      ],
+      application:[
+        "כלפי בנק הצפון: חוזה המכר שכרת אבנר עם רחל ביוני 2019 קדם בזמן לעיקול שנרשם בספטמבר 2021. לפי הלכת בונוראה, יש לאבנר זכות מעין-קניינית הגוברת על נושה כללי כבנק הצפון, ואין נפקות לאי-רישום הערת אזהרה (גדי) – הלכת גנז רלוונטית לעסקאות נוגדות בין שני קונים, לא לתחרות עם נושה כללי.",
+        "כלפי שרון: שרון לא רכשה מרחל עצמה אלא ממתחזה שהציג יפוי כוח מזויף. מתחזה אינו יכול להעביר זכות שאינה שלו, כך שלכאורה אין כאן \"עסקאות נוגדות\" במשמעות ס' 9 (הדורש שני חוזים תקפים מאותו מוכר אמיתי), אלא מקרה של רכישה ממתחזה.",
+        "שרון תנסה להישען על תקנת השוק (ס' 10), אך לפי קניפנוק, ס' 10 חל רק כשהקונה רוכש ישירות מהבעלים הרשום בפועל; רכישה ממתחזה על בסיס יפוי כוח מזויף היא סיכון חיצוני למשרד הרישום (ולא שגגה פנימית כמו בהרטפלד), ולכן אינה מכוסה על ידי הסעיף."
+      ],
+      conclusion:"אבנר גובר על בנק הצפון מכוח הלכת בונוראה. שרון, שרכשה ממתחזה על בסיס יפוי כוח מזויף, אינה מוגנת ככל הנראה על ידי תקנת השוק (קניפנוק), כך שזכותה הרשומה עומדת בסיכון להתבטל לטובת אבנר – שהוא בעל הזכות החוזית האמיתית והמוקדמת בזמן ביחס לדירה. לשרון תיוותר, ככל שתוכיח זאת, עילה כנגד מי שזייף את יפוי הכוח, אך לא זכות קניינית בדירה.",
+      matrix:[
+        {c:"זיהוי מדויק של כל הסוגיות המשפטיות",p:20,d:"הבחנה בין שאלת התחרות עם הנושה (בונוראה) לבין שאלת הרכישה ממתחזה (ס' 10), ולא טיפול בשתיהן כעסקאות נוגדות רגילות."},
+        {c:"איתור הדין הרלוונטי",p:20,d:"אזכור מדויק של הלכת בונוראה, פסד גדי, וההבחנה בהרטפלד/מוזאפר/קניפנוק בין שגגה פנימית לסיכון חיצוני למשרד."},
+        {c:"יישום מעמיק על העובדות",p:30,d:"ניתוח התאריכים (2019–2023), הסבר מדויק לכך שמתחזה אינו יכול להעביר זכות, ויישום מבחן קניפנוק על נסיבות שרון."},
+        {c:"מסקנה מנומקת ושיקולי מדיניות",p:20,d:"מסקנה ברורה לשני הסעיפים, בצירוף שיקול מדיניות (ודאות המרשם מול הגנה על מי שהוטעה מגורם חיצוני)."},
+        {c:"ניסוח משפטי, מבנה ובהירות",p:10,d:"הפרדה ברורה בין שני הסעיפים, ניסוח ממוקד ומדויק."}
+      ]
+    }
+  },
+  {
+    id:"case2",
+    num:"תיק ב׳",
+    title:"הבית ברחוב הערבה, רעננה — ידועים בציבור, משכנתא ועיקול",
+    diff:"רמת קושי: עבודת אמצע",
+    tags:["חזקת השיתוף","ידועים בציבור","הלכת טורג'מן","תום לב מוגבר של נושה"],
+    blurb:"ידועה בציבור הטוענת לזכות שיתוף בבית, מול בנק שמשכנתא נרשמה לזכותו ונושה פרטי שהטיל עיקול — אותה טענה, שתי תוצאות אפשריות.",
+    facts:[
+      "יורם בר-נתן ושרון אדרי הם ידועים בציבור זה 19 שנה (חיים כבני זוג, ללא נישואין פורמליים), ומתגוררים בבית צמוד קרקע ברחוב הערבה 9, רעננה (\"הבית\"), הרשום בלשכת רישום המקרקעין על שם יורם בלבד, מכוח ירושה מהוריו. בני הזוג מימנו במשותף את שיפוץ הבית והרחבתו, ושרון ניהלה משך שנים את משק הבית המשפחתי.",
+      "בשנת 2022 פנה יורם ל\"בנק הדרום למשכנתאות\" וקיבל הלוואה למימון עסקו, כנגד משכנתא שנרשמה על הבית כולו לטובת הבנק. הבנק בדק את נסח הרישום, מצא כי הבית רשום על שם יורם בלבד, ולא בדק ולא שאל דבר על מצבו האישי או על מי שמתגורר עמו בנכס.",
+      "בשנת 2023, כשנקלע יורם לקשיים נוספים, לקח הלוואה פרטית בלתי-מובטחת ממר בוריס קמינסקי, מכר עסקי. בוריס אף הוא לא בדק ולא שאל דבר על מצבו המשפחתי של יורם. משלא עמד יורם בהחזרים, קיבל בוריס פסק דין לחובו ורשם עיקול על הבית.",
+      "שרון מתנגדת לשתי הפעולות – המשכנתא והעיקול – ודורשת שלא יחולו על חלקה בבית, בטענה כי מכוח חזקת השיתוף הפסיקתית (כידועים בציבור) יש לה מחצית מהזכויות בבית, ושבני הזוג ממשיכים לחיות חיי שיתוף מלאים, ולא הגיעו ל\"קרע\" ביניהם."
+    ],
+    subQuestions:[
+      {label:"סעיף א׳",text:"דונו בתוקף המשכנתא שנרשמה לטובת בנק הדרום על הבית כולו, לאור טענת שרון לזכות שיתוף."},
+      {label:"סעיף ב׳",text:"דונו בתוקף העיקול שרשם בוריס קמינסקי על הבית, לאור אותה טענה."}
+    ],
+    solution:{
+      issues:[
+        "האם זכות השיתוף של שרון, כידועה בציבור, גוברת על המשכנתא שנטל יורם לטובת בנק הדרום?",
+        "האם אותה זכות גוברת על העיקול שרשם בוריס קמינסקי, נושה פרטי בלתי-מובטח?"
+      ],
+      rule:[
+        "חזקת השיתוף הפסיקתית חלה על כל זוג שהתחתן לפני 1974 ועל ידועים בציבור, ויוצרת בעלות קניינית משותפת על נכסים שנרכשו/שופצו במאמץ משותף, ללא צורך ברישום.",
+        "הלכת טורג'מן (ע\"א 8497/06): כאשר דירה רשומה כולה על שם אחד מבני הזוג, ונמשכנה לטובת בנק בתמורה ובתום לב, וטרם הגיע הזוג ל\"דעום קריטי\" – הדירה כולה (לא רק מחצית) ממושכנת כדין לטובת הבנק.",
+        "הלכת בן-יצחק (ע\"א 3002/93): כאשר הנכס הוא דירת מגורים והנושה ידע כי הנכס רשום על שם אחד מבני הזוג ושניהם מתגוררים בו, חלה עליו חובת תום-לב מוגברת; ידיעה על הקשר הזוגי בשילוב הסתמכות על נכס משפחתי ללא בדיקה עשויה להוות חוסר תום לב."
+      ],
+      application:[
+        "ביחס למשכנתא: בנק הדרום הוא נושה מובטח שביצע עסקה רגילה (משכנתא) בתמורה ובתום לב, בהתבסס על הרישום שהראה את יורם כבעלים הבלעדי. בהיעדר טענה ל\"קרע\" בין הצדדים, ולפי הלכת טורג'מן, המשכנתא תקפה על הבית כולו, ואין בזכות השיתוף של שרון כדי לגרוע מתוקפה כלפי בנק שפעל בתום לב ובתמורה.",
+        "ביחס לעיקול: בוריס הוא נושה פרטי כללי (לא מוסדי, לא מובטח), שנתן הלוואה ללא כל בדיקה של מצבו האישי של יורם. בשונה מעסקת משכנתא מובנית של בנק, נדרשת מבוריס – לפי בן-יצחק – רמת בדיקה מוגברת לאור היות הבית דירת מגורים משפחתית שבה מתגוררים שני הצדדים.",
+        "אי-בדיקה זו עשויה לבסס חוסר תום לב מצדו של בוריס, ולפיכך ייתכן שהעיקול לא יחול על חלקה היחסי של שרון בבית, מכוח חזקת השיתוף – בניגוד למשכנתא של בנק הדרום."
+      ],
+      conclusion:"המשכנתא לטובת בנק הדרום תקפה, ככל הנראה, על הבית כולו (טורג'מן), שכן הבנק פעל בתום לב ובתמורה ולא הוכח \"קרע\" בין הצדדים. העיקול שרשם בוריס קמינסקי, לעומת זאת, עשוי שלא לחול על חלקה היחסי של שרון, אם יוכח כי בוריס לא קיים את חובת הבדיקה המוגברת הנדרשת ביחס לנכס משפחתי (בן-יצחק).",
+      matrix:[
+        {c:"זיהוי מדויק של כל הסוגיות המשפטיות",p:20,d:"הבחנה בין מעמד הבנק (נושה מובטח, עסקת משכנתא) לבין מעמד בוריס (נושה כללי, הלוואה פרטית) — שתי שאלות נפרדות."},
+        {c:"איתור הדין הרלוונטי",p:20,d:"אזכור חזקת השיתוף לידועים בציבור, הלכת טורג'מן, והלכת בן-יצחק."},
+        {c:"יישום מעמיק על העובדות",p:30,d:"ניתוח ההבדל ברמת הבדיקה הנדרשת מנושה מוסדי לעומת נושה פרטי, ובחינת התקיימות תנאי ה\"קרע\"."},
+        {c:"מסקנה מנומקת ושיקולי מדיניות",p:20,d:"מסקנה שונה לכל סעיף, עם נימוק לפער (הגנה על נכס משפחתי מול ודאות מסחרית/הסתמכות הבנק)."},
+        {c:"ניסוח משפטי, מבנה ובהירות",p:10,d:"הפרדה ברורה בין שני הסעיפים, תוך הימנעות מהחלת אותה תוצאה על שני הנושים באופן גורף."}
+      ]
+    }
+  },
+  {
+    id:"case3",
+    num:"תיק ג׳",
+    title:"נאמנות 'נאמן נדל\"ן' באשדוד — נהנה, בנק וערב",
+    diff:"רמת קושי: מבחן מסכם",
+    tags:["נאמנות","ידיעת הבנק","זכות התחלוף","חוק המשכון"],
+    blurb:"נהנה בנאמנות שלא פורסמה מתמודד עם עיקול של הבנק על דירתו, וערב שפרע חוב מבקש לחזור ולהיפרע — שתי שאלות, אותה חברה.",
+    facts:[
+      "חברת \"נאמן נדל\"ן בע\"מ\" מחזיקה בנאמנות, עבור קבוצת משקיעים פרטיים, בניין מגורים בן 12 דירות באשדוד. הנאמנות לא נרשמה ככזו בפנקס המקרקעין; הבניין רשום על שם החברה כבעלים פורמלי, ובהסכם הנאמנות הפנימי (שלא פורסם) הוקצו לכל אחד מהמשקיעים, ובהם מר דני אלפסי, זכויות מוגדרות בדירה מסוימת בבניין.",
+      "בשנת 2021, כדי לאפשר לחברה לקבל אשראי, ערב מר אלי שגיא (מנהל החברה) באופן אישי להלוואה שנתן \"בנק לאומי המזרח\" לחברה.",
+      "בשנת 2023 לא עמדה החברה בהחזרי ההלוואה. אלי, הערב, פרע מכיסו את מלוא החוב לבנק, ולאחר מכן דרש מהחברה להיפרע ממנה את הסכום ששילם.",
+      "בנפרד, בטרם נפרע על ידי אלי, פעל הבנק למימוש בטוחה נוספת שהייתה לו – עיקול שהטיל על דירה ספציפית בבניין, אותה דירה שהוקצתה בהסכם הנאמנות לדני אלפסי. דני התנגד למימוש, בטענה כי נציג הבנק שטיפל בהסכם ההלוואה קיבל לידיו מסמך פנימי שפירט את חלוקת הדירות בין המשקיעים, ולפיכך ידע הבנק בפועל על זכותו הספציפית בדירה."
+    ],
+    subQuestions:[
+      {label:"סעיף א׳",text:"דונו בטענת דני אלפסי לפיה זכותו כנהנה בנאמנות גוברת על העיקול שהטיל בנק לאומי המזרח על הדירה שהוקצתה לו."},
+      {label:"סעיף ב׳",text:"דונו בזכותו של אלי שגיא, הערב שפרע את החוב לבנק, לחזור ולהיפרע מהחברה."}
+    ],
+    solution:{
+      issues:[
+        "האם ידיעתו (הנטענת) של הבנק על הסדר הנאמנות ועל זכותו הספציפית של דני, גוברת על מעמדו של הבנק כנושה מעקל?",
+        "האם, ובאיזה אופן, זכאי ערב שפרע חוב מובטח של חברה לחזור ולהיפרע ממנה?"
+      ],
+      rule:[
+        "ס' 3(ב) לחוק הנאמנות: לא ניתן לרדת לנכסי הנאמנות אלא בשל חובות המוטלים עליהם או הנובעים מפעולות הנאמנות; חוב חיצוני של הנאמן אינו מאפשר לרדת לנכסי הנאמנות.",
+        "ס' 5 לחוק הנאמנות: כוחה של נאמנות יפה כלפי כל מי שידע עליה.",
+        "פסד אמסטר (ע\"א 5955/09): מגמת הפסיקה לחזק את זכויות הנהנה בנכסי הנאמנות ולהעדיפו על פני עיקול חיצוני של נושה שאין לו קשר לנאמנות.",
+        "ס' 14 לחוק המשכון (זכות התחלוף): משכון/חוב מובטח שלא נפדה על ידי החייב – זכאי מי שאינו החייב (כגון ערב שמילא את ערבותו) לחזור אל החייב ולהיפרע ממנו."
+      ],
+      application:[
+        "ביחס לדני: העיקול שהטיל הבנק נסמך, על פניו, על חוב חיצוני לנאמנות (חוב כללי של החברה הנאמנת, ולא חוב הנובע מפעולות הנאמנות ביחס לדירה הספציפית), כך שלפי ס' 3(ב) לחוק הנאמנות יש קושי לרדת לנכס הנאמנות בגינו.",
+        "ככל שיוכח כי הבנק קיבל בפועל מידע קונקרטי המזהה את דני כבעל זכות בדירה מוגדרת (ולא רק ידיעה כללית על קיומה של קבוצת משקיעים) – הדבר מחזק את תחולת ס' 5 לחוק הנאמנות ואת ההלכה באמסטר, ומטה את הכף לטובת דני, שכן הבנק לא ייחשב תם-לב כלפי זכות שידע עליה בפועל.",
+        "ביחס לאלי: משפרע אלי, כערב, את מלוא חוב החברה לבנק, הוא נכנס – מכוח ס' 14 לחוק המשכון – בנעלי הבנק כלפי החברה החייבת, וזכאי לחזור ולהיפרע ממנה. ככל שהחוב שנפרע היה חוב כללי וחיצוני של החברה (ולא חוב הנובע מפעולות הנאמנות עצמה), אין בזכות התחלוף של אלי כדי לפגוע בנכסי הנהנים הספציפיים בנאמנות."
+      ],
+      conclusion:"ככל שיוכח שהבנק קיבל מידע ספציפי ומזוהה אודות זכותו של דני בדירה, סביר שזכותו כנהנה תגבר על העיקול. אלי, הערב שפרע את חוב החברה, זכאי מכוח ס' 14 לחוק המשכון לחזור ולהיפרע מהחברה עצמה כחייבת, אך זכות זו פועלת כלפי החברה ואינה פוגעת בנכסי הנהנים בנאמנות.",
+      matrix:[
+        {c:"זיהוי מדויק של כל הסוגיות המשפטיות",p:20,d:"הבחנה בין שאלת מעמד דני כנהנה לבין שאלת זכות התחלוף של אלי — שתי שאלות בלתי תלויות באותה מערכת עובדות."},
+        {c:"איתור הדין הרלוונטי",p:20,d:"אזכור ס' 3(ב) ו-5 לחוק הנאמנות, פסד אמסטר, וס' 14 לחוק המשכון."},
+        {c:"יישום מעמיק על העובדות",p:30,d:"בחינה דקדקנית של ההבחנה בין חוב חיצוני לנאמן לבין חוב הנובע מפעולות הנאמנות, ושל רמת הידיעה הנדרשת מהבנק (כללית מול ספציפית)."},
+        {c:"מסקנה מנומקת ושיקולי מדיניות",p:20,d:"מסקנה מסויגת ומותנית בראיות, עם שיקול מדיניות (הגנה על נהנה תם-לב מול ודאות מסחרית של נושים)."},
+        {c:"ניסוח משפטי, מבנה ובהירות",p:10,d:"הפרדה ברורה בין שתי הסוגיות והימנעות מערבוב בין מעמד דני לבין מעמד אלי."}
+      ]
+    }
+  },
+  {
+    id:"case4",
+    num:"תיק ד׳",
+    title:"מלאי התכשיטים של 'תכשיטי זוהר' — שימור בעלות, פירוק ותקנת השוק",
+    diff:"רמת קושי: מבחן מסכם",
+    tags:["תניית שימור בעלות","הלכת קולומבו","שעבוד צף","תקנת השוק במיטלטלין"],
+    blurb:"ספק שטוען לבעלות בתכשיטים מול כונס נכסים בפירוק, ולקוחה שקנתה טבעת אחת בתום לב — שאלה אחת על אופי ההסכם, ושאלה נפרדת על הגנת הקונה.",
+    facts:[
+      "חברת \"תכשיטי זוהר בע\"מ\" (\"זוהר\") מקבלת מהספק \"יהלומי גליל בע\"מ\" (\"גליל\") מלאי תכשיטים, במסגרת הסכם שכונה \"הסכם קונסיגנציה\", שלפיו הבעלות בתכשיטים נותרת בידי גליל עד לתשלום מלא, וזוהר התחייבה לדווח לגליל על כל מכירה ולשלם בהתאם.",
+      "בפועל, זוהר מיזגה את התכשיטים עם שאר מלאיה הרגיל, מכרה אותם בחנות ללא הפרדה או סימון מיוחד, ודיווחה לגליל על מכירות רק אחת לכמה חודשים – לפי מצב המלאי הכללי שנותר, ולא עסקה-עסקה.",
+      "בשנת 2023 נכנסה זוהר להליכי פירוק. כונס הנכסים, מטעם בנק \"הבירה\" המחזיק שעבוד צף רשום על כלל נכסי זוהר, טוען כי התכשיטים שנותרו במלאי הם נכס של זוהר וכפופים לשעבוד הצף. גליל מתנגדת, בטענה שהבעלות בתכשיטים מעולם לא עברה לזוהר מכוח תניית שימור הבעלות בהסכם.",
+      "בנפרד, חודש לפני הפירוק נכנסה גב' תמר לוין לחנות זוהר וקנתה טבעת אחת מתוך אותו מלאי, שילמה את מלוא מחירה, וקיבלה אותה לחזקתה, מבלי לדעת כלל על קיומו של הסכם הקונסיגנציה בין זוהר לגליל."
+    ],
+    subQuestions:[
+      {label:"סעיף א׳",text:"דונו בתחרות שבין גליל לבין כונס הנכסים מטעם בנק הבירה, לעניין מעמד התכשיטים שנותרו במלאי."},
+      {label:"סעיף ב׳",text:"דונו בזכויותיה של תמר לוין בטבעת שרכשה."}
+    ],
+    solution:{
+      issues:[
+        "האם ההסכם בין גליל לזוהר הוא, לפי תוכנו הכלכלי האמיתי, עסקת שימור בעלות גרידא, או שעבוד מוסווה המחייב רישום?",
+        "האם תמר לוין, שרכשה תכשיט בודד מן המלאי בתום לב ובתמורה, מוגנת מפני טענת הבעלות של גליל מכוח תקנת השוק במיטלטלין?"
+      ],
+      rule:[
+        "תניית שימור בעלות: תנאי לפיו הבעלות בסחורה עוברת לקונה רק לאחר תשלום מלא.",
+        "הלכת קולומבו (ע\"א 455/89): עסקת קונסיגנציה שכוונתה המהותית שעבוד (ערובה לחיוב) מחייבת רישום לפי ס' 178(א) לפקודת החברות; בהיעדר רישום – השעבוד בטל כלפי נושים בפירוק.",
+        "הלכת קידוחי הצפון (רע\"א 1690/00): מבחן דו-שלבי לבחינת אמיתות תניית שימור הבעלות – (1) סובייקטיבי: האם הצדדים התכוונו לשעבד; (2) אובייקטיבי: האם ההיגיון הכלכלי הוא של משכון. אם שתי התשובות שליליות – יש לכבד את תניית שימור הבעלות כלשונה.",
+        "ס' 34 לחוק המכר (תקנת השוק במיטלטלין): שישה תנאים מצטברים, ובהם שהמוכר עוסק במכירת נכסים מסוגו של הממכר, שהמכירה הייתה במהלך הרגיל של עסקיו, ושהקונה קנה וקיבל לחזקתו בתום לב."
+      ],
+      application:[
+        "ביחס לתחרות בין גליל לבנק: יש לבחון את ההסכם לפי תוכנו ולא לפי כינויו. העובדה שזוהר מיזגה את התכשיטים עם מלאייה הרגיל, מכרה אותם ללא הפרדה או סימון, ודיווחה לגליל רק אחת לתקופה לפי מצב כללי – מצביעה על כך שההיגיון הכלכלי של ההסדר היה מימוני (שעבוד), ולא שמירת בעלות אמיתית על פריטים מסוימים וניתנים לזיהוי.",
+        "במבחן הדו-שלבי של קידוחי הצפון, ייתכן שהמבחן האובייקטיבי (היגיון כלכלי של משכון) מתקיים בנסיבות אלו; אם כך, לפי קולומבו מדובר בשעבוד שהיה טעון רישום לפי ס' 178(א) לפקודת החברות, ומשלא נרשם – הוא בטל כלפי כונס הנכסים מטעם הבנק.",
+        "ביחס לתמר: בהנחה שזוהר עוסקת במכירת תכשיטים במהלך הרגיל של עסקיה, ותמר קנתה וקיבלה את הטבעת לחזקתה בתום לב ובתמורה מלאה – מתקיימים, על פניהם, תנאי ס' 34 לחוק המכר. בשונה מהשאלה הקודמת, אין צורך להכריע כאן בשאלת אופי ההסכם בין זוהר לגליל: גם אם גליל הייתה הבעלים החוקי של התכשיט, ס' 34 \"מנקה\" את הבעלות העוברת לקונה תם-לב שרכש ממי שעוסק במכירת נכסים מסוג הממכר במהלך הרגיל של עסקיו."
+      ],
+      conclusion:"ביחס לתכשיטים שנותרו במלאי, סביר שיוכרע כי ההסדר בין גליל לזוהר הוא שעבוד מוסווה שלא נרשם, ולכן בטל כלפי כונס הנכסים מטעם בנק הבירה (קולומבו). תמר לוין, לעומת זאת, מוגנת ככל הנראה מכוח תקנת השוק במיטלטלין (ס' 34 לחוק המכר), ורכשה בעלות נקייה בטבעת – גם אם גליל הייתה בעלת הזכות המקורית בה.",
+      matrix:[
+        {c:"זיהוי מדויק של כל הסוגיות המשפטיות",p:20,d:"הבחנה בין שאלת אופי ההסכם בין גליל לזוהר לבין שאלת זכותה הנפרדת של תמר כקונה."},
+        {c:"איתור הדין הרלוונטי",p:20,d:"אזכור הלכת קולומבו, הלכת קידוחי הצפון, ס' 178(א) לפקודת החברות, וס' 34 לחוק המכר."},
+        {c:"יישום מעמיק על העובדות",p:30,d:"ניתוח האינדיקציות לאופי הכלכלי האמיתי של ההסכם (מיזוג מלאי, דיווח תקופתי) ויישום תנאי ס' 34 על נסיבות תמר."},
+        {c:"מסקנה מנומקת ושיקולי מדיניות",p:20,d:"מסקנה שונה ועצמאית לכל סעיף, עם נימוק (הגנת נושי הפירוק וודאות מסחרית מול הגנת קונה תם-לב)."},
+        {c:"ניסוח משפטי, מבנה ובהירות",p:10,d:"שמירה על הפרדה בין שתי השאלות, מבלי להכריע בזכות תמר על בסיס תוצאת השאלה הראשונה."}
+      ]
+    }
+  }
+];
 
 function tag(t){return '<span class="'+(t.t==="c"?"tc":"tl")+'">'+t.v+'</span>';}
 
@@ -1655,11 +1865,25 @@ function cs(){
 
 function renderNav(){
   document.getElementById("nav-items").innerHTML=DB.categories.map(function(cat){
-    return'<div class="nav-item'+(S.cat===cat.id?" active":"")+'" onclick="switchCat(\''+cat.id+'\')"><div class="nav-icon">'+cat.icon+'</div><div class="nav-txt"><div class="nav-label">'+cat.label+'</div><div class="nav-sub">'+cat.sub+"</div></div></div>";
+    return'<div class="nav-item'+(S.mode==="category"&&S.cat===cat.id?" active":"")+'" onclick="switchCat(\''+cat.id+'\')"><div class="nav-icon">'+cat.icon+'</div><div class="nav-txt"><div class="nav-label">'+cat.label+'</div><div class="nav-sub">'+cat.sub+"</div></div></div>";
   }).join("");
 }
 
+function renderNavExtra(){
+  var el=document.getElementById("nav-extra");
+  if(!el)return;
+  el.innerHTML='<div class="nav-item'+(S.mode==="exam"?" active":"")+'" onclick="openExamCenter()"><div class="nav-icon">🎓</div><div class="nav-txt"><div class="nav-label">מרכז תרגול מקיף</div><div class="nav-sub">קייסים מסכמים לקראת המבחן</div></div></div>';
+}
+
 function renderContent(){
+  if(S.mode==="exam"){
+    document.getElementById("tab-bar").style.display="none";
+    document.getElementById("hdr-eyebrow").textContent="🎓 כלי תרגול עצמאי";
+    document.getElementById("hdr-title").textContent="מרכז תרגול מקיף";
+    document.getElementById("content-area").innerHTML=renderExamCenter();
+    return;
+  }
+  document.getElementById("tab-bar").style.display="flex";
   var cat=DB.categories.find(function(c){return c.id===S.cat;});
   var cnt=DB.content[S.cat];
   var has=cnt&&cnt.study!==null;
@@ -1673,7 +1897,7 @@ function renderContent(){
   document.getElementById("content-area").innerHTML=html;
 }
 
-function switchCat(id){S.cat=id;S.tab="study";document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.toggle("active",b.dataset.tab==="study");});renderNav();renderContent();closeSidebar();}
+function switchCat(id){S.cat=id;S.tab="study";S.mode="category";document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.toggle("active",b.dataset.tab==="study");});renderNav();renderNavExtra();renderContent();closeSidebar();}
 function switchTab(id){S.tab=id;document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.toggle("active",b.dataset.tab===id);});renderContent();}
 function onAns(id,v){S.answers[id]=v;var btn=document.getElementById("btn-"+id);if(btn)btn.disabled=!v.trim();}
 function checkAns(id){
@@ -1686,7 +1910,114 @@ function checkAns(id){
 function toggleSidebar(){document.getElementById("sidebar").classList.toggle("open");document.getElementById("sidebar-overlay").classList.toggle("open");}
 function closeSidebar(){document.getElementById("sidebar").classList.remove("open");document.getElementById("sidebar-overlay").classList.remove("open");}
 
+// ─── EXAM PRACTICE CENTER — render + control functions ─────────────
+function openExamCenter(){
+  S.mode="exam";
+  renderNav();
+  renderNavExtra();
+  renderContent();
+  closeSidebar();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function examOpenCase(id){
+  S.examCase=id;
+  renderContent();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function examBackToList(){
+  S.examCase=null;
+  renderContent();
+}
+
+function onExamAns(caseId,field,v){
+  if(!S.examAnswers[caseId])S.examAnswers[caseId]={};
+  S.examAnswers[caseId][field]=v;
+}
+
+function examToggleSolution(caseId){
+  S.examSolutionShown[caseId]=!S.examSolutionShown[caseId];
+  renderContent();
+  if(S.examSolutionShown[caseId]){
+    setTimeout(function(){
+      var el=document.getElementById("exam-solution-"+caseId);
+      if(el)el.scrollIntoView({behavior:"smooth",block:"start"});
+    },60);
+  }
+}
+
+function renderExamCenter(){
+  if(!S.examCase)return renderExamList();
+  var c=MASTER_CASES.find(function(x){return x.id===S.examCase;});
+  if(!c)return renderExamList();
+  return renderExamCaseDetail(c);
+}
+
+function renderExamList(){
+  var h='<div class="exam-tip"><strong>🎓 מרכז תרגול מקיף:</strong> ארבעה קייסים מסכמים ברמת קושי של עבודת אמצע/מבחן סיום, המשלבים בעת ובעונה אחת כמה דוקטרינות מתוך פרקי הקורס. בחרו קייס, נסחו תשובה לפי שיטת IRAC, ולבסוף חשפו פתרון מודרך עם מטריצת ניקוד.</div>';
+  h+='<div class="exam-grid">';
+  MASTER_CASES.forEach(function(c){
+    h+='<div class="exam-card" onclick="examOpenCase(\''+c.id+'\')">'
+      +'<div class="exam-card-num">'+c.num+'</div>'
+      +'<div class="exam-card-title">'+c.title+'</div>'
+      +'<div class="exam-card-blurb">'+c.blurb+'</div>'
+      +'<div class="exam-card-tags">'+c.tags.map(function(t){return'<span class="tl">'+t+'</span>';}).join('')+'</div>'
+      +'<div class="exam-card-open">📂 פתחו את הקייס ←</div>'
+      +'</div>';
+  });
+  h+='</div>';
+  return h;
+}
+
+function iracField(caseId,field,letter,label,hint,value){
+  return'<div class="irac-block"><div class="irac-lbl"><span class="irac-letter">'+letter+'</span>'+label+'</div>'
+    +'<div class="irac-hint">'+hint+'</div>'
+    +'<textarea class="ans" oninput="onExamAns(\''+caseId+'\',\''+field+'\',this.value)" placeholder="הקלד/י כאן...">'+(value||"")+'</textarea></div>';
+}
+
+function renderExamCaseDetail(c){
+  var ans=S.examAnswers[c.id]||{};
+  var h='<button class="exam-back" onclick="examBackToList()">→ חזרה לרשימת הקייסים</button>';
+  h+='<div class="card">';
+  h+='<div class="exam-detail-head"><div class="exam-detail-title">'+c.num+' – '+c.title+'</div><div class="exam-diff-badge">'+c.diff+'</div></div>';
+  h+='<div class="exam-card-tags" style="margin-bottom:6px">'+c.tags.map(function(t){return'<span class="tl">'+t+'</span>';}).join('')+'</div>';
+  h+='<div class="exam-facts">'+c.facts.map(function(p){return'<p>'+p+'</p>';}).join('')+'</div>';
+  h+='<div class="exam-subq-wrap">'+c.subQuestions.map(function(q){return'<div class="rbox"><div class="rname">'+q.label+'</div><div class="rtxt">'+q.text+'</div></div>';}).join('')+'</div>';
+  h+='</div>';
+
+  h+='<div class="card"><h3>🧩 סדנת ניתוח משפטי – שיטת IRAC</h3>';
+  h+=iracField(c.id,"issue","I","זיהוי סוגיות משפטיות","מהן השאלות המשפטיות שעולות מהמקרה? נסחו כל סוגיה כשאלה ממוקדת.",ans.issue);
+  h+=iracField(c.id,"rule","R","הדין וההלכה הרלוונטית","ציינו את הסעיפים וההלכות הרלוונטיים מהחוק ומהפסיקה.",ans.rule);
+  h+=iracField(c.id,"application","A","יישום וניתוח העובדות","החילו את הדין על עובדות המקרה הספציפיות – תאריכים, ידיעה בפועל/בכוח, ושיקולי מדיניות.",ans.application);
+  h+=iracField(c.id,"conclusion","C","מסקנה משפטית מנומקת","סכמו מי גובר ולמה, לכל סעיף בשאלה.",ans.conclusion);
+  h+='<div style="text-align:center;margin-top:6px"><button class="cbtn" onclick="examToggleSolution(\''+c.id+'\')">'+(S.examSolutionShown[c.id]?"🙈 הסתר פתרון מודרך":"📖 הצג פתרון בית-ספר מודרך")+'</button></div>';
+  h+='</div>';
+
+  if(S.examSolutionShown[c.id]){
+    h+='<div class="fbbox" id="exam-solution-'+c.id+'">'+renderExamSolution(c)+'</div>';
+  }
+  return h;
+}
+
+function renderExamSolution(c){
+  var s=c.solution;
+  var bl=function(arr){return arr.map(function(t){return'<div class="brow"><div class="bdot"></div><div class="btxt">'+t+'</div></div>';}).join('');};
+  var h='<div class="fbh">✅ פתרון מודרך ומטריצת ניקוד</div>';
+  h+='<div class="fbs"><h4>🔍 סוגיות משפטיות שיש לאתר</h4>'+bl(s.issues)+'</div>';
+  h+='<div class="fbs"><h4>📚 הדין וההלכה</h4>'+bl(s.rule)+'</div>';
+  h+='<div class="fbs"><h4>🧮 יישום וניתוח</h4>'+bl(s.application)+'</div>';
+  h+='<div class="fbs"><h4>🎯 מסקנה</h4><p style="font-weight:600">'+s.conclusion+'</p></div>';
+  h+='<div class="fbs" style="margin-bottom:0"><h4>📊 מטריצת ניקוד מנחה (100 נק׳)</h4><table class="matrix-table"><thead><tr><th>קריטריון</th><th>ניקוד</th><th>מה בודקים</th></tr></thead><tbody>';
+  s.matrix.forEach(function(m){
+    h+='<tr><td>'+m.c+'</td><td><span class="matrix-pts">'+m.p+'</span></td><td>'+(m.d||"")+'</td></tr>';
+  });
+  h+='</tbody></table></div>';
+  return h;
+}
+
 renderNav();
+renderNavExtra();
 renderContent();
 </script>
 </body>
